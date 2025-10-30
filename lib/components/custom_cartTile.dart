@@ -32,39 +32,38 @@ class CustomCartTile extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(width: 10),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          cartItem.food.name,
-                          maxLines: 2,
-                          softWrap: true,
-                          //overflow: TextOverflow.ellipsis,
-                        ),
 
-                        Text(
-                          '\$${cartItem.food.price}',
-                          style: TextStyle(
-                            color: Theme.of(context).colorScheme.primary,
-                          ),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        cartItem.food.name,
+                        // maxLines: 2,
+                        // softWrap: true,
+                        //overflow: TextOverflow.ellipsis,
+                      ),
+
+                      Text(
+                        '\$${cartItem.food.price}',
+                        style: TextStyle(
+                          color: Theme.of(context).colorScheme.primary,
                         ),
-                      ],
-                    ),
-                  ),
-                  const Spacer(),
-                  CustomQuantitySelector(
-                    quantity: cartItem.quantity,
-                    food: cartItem.food,
-                    onDecrement: () {
-                      restaurant.removeFromCart(cartItem);
-                    },
-                    onIncrement: () {
-                      restaurant.addToCart(
-                        cartItem.food,
-                        cartItem.selectedAddons,
-                      );
-                    },
+                      ),
+                      const SizedBox(height: 10),
+                      CustomQuantitySelector(
+                        quantity: cartItem.quantity,
+                        food: cartItem.food,
+                        onDecrement: () {
+                          restaurant.removeFromCart(cartItem);
+                        },
+                        onIncrement: () {
+                          restaurant.addToCart(
+                            cartItem.food,
+                            cartItem.selectedAddons,
+                          );
+                        },
+                      ),
+                    ],
                   ),
                 ],
               ),

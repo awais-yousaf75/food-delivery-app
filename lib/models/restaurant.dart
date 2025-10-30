@@ -5,6 +5,7 @@ import 'package:food_delivery_app/models/food.dart';
 import 'package:intl/intl.dart';
 
 class Restaurant extends ChangeNotifier {
+  String _deliveryAddress = 'Main avenue model town';
   final List<Food> _menu = [
     //burgers
     Food(
@@ -343,6 +344,13 @@ class Restaurant extends ChangeNotifier {
   ];
   List<Food> get menu => _menu;
   List<CartItem> get cart => _cart;
+  String get deliveryAddress => _deliveryAddress;
+
+  void updateDeliveryAddress(String newAddress) {
+    _deliveryAddress = newAddress;
+    notifyListeners();
+  }
+
   final List<CartItem> _cart = [];
   void addToCart(Food food, List<Addon> selectedAddon) {
     CartItem? cartItem = _cart.firstWhereOrNull((item) {
@@ -436,6 +444,8 @@ class Restaurant extends ChangeNotifier {
     receipt.writeln();
     receipt.writeln('Total items: ${getTotalItemCount()}');
     receipt.writeln('Total price: ${_formatPrice(getTotalPrice())}');
+    receipt.writeln();
+    receipt.writeln('Delivering to: $_deliveryAddress');
 
     return receipt.toString();
   }

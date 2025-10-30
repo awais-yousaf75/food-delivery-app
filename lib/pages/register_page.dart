@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:food_delivery_app/components/custom_authButton.dart';
 import 'package:food_delivery_app/components/custom_textField.dart';
+import 'package:food_delivery_app/services/auth/auth_services.dart';
 
 class RegisterPage extends StatefulWidget {
   final void Function()? onTap;
@@ -15,6 +16,29 @@ class _RegisterPageState extends State<RegisterPage> {
   final TextEditingController passwordController = TextEditingController();
   final TextEditingController confirmPasswordController =
       TextEditingController();
+
+  void register() async {
+    final _authService = AuthService();
+    if (passwordController.text == confirmPasswordController.text) {
+      try {
+        await _authService.signUpWithEmailPassword(
+          emailController.text,
+          passwordController.text,
+        );
+      } catch (e) {
+        showDialog(
+          context: context,
+          builder: (context) => AlertDialog(title: Text(e.toString())),
+        );
+      }
+    } else {
+      showDialog(
+        context: context,
+        builder: (context) => AlertDialog(title: Text("Password must match")),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -66,7 +90,7 @@ class _RegisterPageState extends State<RegisterPage> {
 
             //sign up button
             const SizedBox(height: 25),
-            CustomAuthButton(text: "Sign Up", onTap: () {}),
+            CustomAuthButton(text: "Sign Up", onTap: register),
 
             //already have an account
             const SizedBox(height: 25),

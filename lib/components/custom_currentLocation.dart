@@ -1,23 +1,41 @@
 import 'package:flutter/material.dart';
+import 'package:food_delivery_app/models/restaurant.dart';
+import 'package:provider/provider.dart';
 
-class CustomCurrentLocation extends StatelessWidget {
+class CustomCurrentLocation extends StatefulWidget {
   const CustomCurrentLocation({super.key});
+
+  @override
+  State<CustomCurrentLocation> createState() => _CustomCurrentLocationState();
+}
+
+class _CustomCurrentLocationState extends State<CustomCurrentLocation> {
+  TextEditingController textEditingController = TextEditingController();
 
   void openLocationSearchBox(BuildContext context) {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
         title: const Text("Your location"),
-        content: const TextField(
-          decoration: InputDecoration(hintText: "Search address..."),
+        content: TextField(
+          controller: textEditingController,
+          decoration: InputDecoration(hintText: "Enter address..."),
         ),
         actions: [
           MaterialButton(
-            onPressed: () => Navigator.pop(context),
+            onPressed: () {
+              Navigator.pop(context);
+              textEditingController.clear();
+            },
             child: const Text("Cancel"),
           ),
           MaterialButton(
-            onPressed: () => Navigator.pop(context),
+            onPressed: () {
+              String newAddress = textEditingController.text;
+              context.read<Restaurant>().updateDeliveryAddress(newAddress);
+              Navigator.pop(context);
+              textEditingController.clear();
+            },
             child: const Text("Save"),
           ),
         ],
@@ -40,13 +58,16 @@ class CustomCurrentLocation extends StatelessWidget {
             onTap: () => openLocationSearchBox(context),
             child: Row(
               children: [
-                Text(
-                  "890 main bolleward",
-                  style: TextStyle(
-                    color: Theme.of(context).colorScheme.inversePrimary,
-                    fontWeight: FontWeight.bold,
+                Consumer<Restaurant>(
+                  builder: (context, restaurant, child) => Text(
+                    restaurant.deliveryAddress,
+                    style: TextStyle(
+                      color: Theme.of(context).colorScheme.inversePrimary,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                 ),
+
                 Icon(Icons.keyboard_arrow_down_rounded),
               ],
             ),
